@@ -1,0 +1,3 @@
+[submodule "discovery-mb2"]
+	path = discovery-mb2
+	url = git@github.com:rust-embedded/discovery-mb2.git

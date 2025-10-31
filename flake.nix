@@ -3,19 +3,26 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    rust-overlay.url = "github:oxalica/rust-overlay";
   };
 
-  outputs = { self, nixpkgs }:
+  outputs = { self, nixpkgs, rust-overlay }:
     let
       system = "x86_64-linux";
-      pkgs = import nixpkgs { inherit system; };
+      overlays = [ rust-overlay.overlays.default ];
+      pkgs = import nixpkgs { inherit system overlays; };
+
+      # A Rust toolchain overridden to include the microcontroller target in nix so we don't have
+      # to document some rustup commands. 
+      rust = pkgs.rust-bin.stable.latest.default.override {
+        targets = [ "thumbv7em-none-eabihf" ];
+      };
     in
     {
       devShells.${system}.default =
         pkgs.mkShell {
           buildInputs = with pkgs; [
-            rustc
-            cargo
+            rust
             cargo-binutils
             gcc-arm-embedded # Ships the arm-none-eabi-gdb binary
             probe-rs-tools

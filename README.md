@@ -53,3 +53,40 @@ getfacl: Removing leading '/' from absolute path names
 user::rw-
 user:trey:rw- # <---- nice.
 ```
+
+## Debugging
+
+In the `Embed.toml` for the project, include 
+
+```toml
+[default.gdb]
+enabled = true
+```
+
+to have `cargo embed` open up a GDB stub after flashing and running, then in the case of my dev shell:
+
+```
+# Using this random init binary as an example
+arm-none-eabi-gdb ./discovery-mb2/target/thumbv7em-none-eabihf/debug/examples/init
+
+# Connect to the GDB stub running on your dev host, the port will be output by cargo embed
+(gdb) target remote :1337
+
+# Get the GDB TUI, if you're trying to get silly...
+(gdb) layout src
+
+# Go about your business
+(gdb) break 15
+(gdb) print x
+(gdb) print &x
+(gdb) next
+(gdb) continue
+
+# This is handy when you accidentally skipped over the juicy part of the program.
+# To reset the microcontroller and stop it right at the program entry point:
+(gdb) monitor reset
+(gdb) c # Continue...
+```
+
+
+

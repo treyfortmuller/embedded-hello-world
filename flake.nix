@@ -15,7 +15,8 @@
       # A Rust toolchain overridden to include the microcontroller target in nix so we don't have
       # to document some rustup commands. 
       rust = pkgs.rust-bin.stable.latest.default.override {
-        targets = [ "thumbv7em-none-eabihf" ];
+        extensions = [ "llvm-tools-preview" ]; # Required for `cargo size` shipped with cargo-binutils.
+        targets = [ "thumbv7em-none-eabihf" ]; # Thumb... is smaller than an ARM, ridiculous.
       };
     in
     {

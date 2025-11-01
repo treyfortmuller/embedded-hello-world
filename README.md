@@ -88,5 +88,33 @@ arm-none-eabi-gdb ./discovery-mb2/target/thumbv7em-none-eabihf/debug/examples/in
 (gdb) c # Continue...
 ```
 
+## Minicom
 
+Here's an appropriate `minicom` config file (`~/.minirc.dfl`) for interacting with the serial device on the MBv2.
+
+```
+pu baudrate 115200
+pu bits 8
+pu parity N
+pu stopbits 1
+pu rtscts No
+pu xonxoff No
+```
+
+Then you should be able to let this rip:
+
+```
+minicom -D /dev/ttyACM0 -b 115200
+```
+
+Honestly I can never remember the minicom keyboard bindings though:
+- `Ctrl+A` + `Z`. Minicom Command Summary
+- `Ctrl+A` + `C`. Clear the screen
+- `Ctrl+A` + `X`. Exit and reset
+- `Ctrl+A` + `Q`. Quit with no reset
+
+## Reference
+
+* [Hardware Pinmap Table](https://tech.microbit.org/hardware/schematic/#v2-pinmap)
+* [nRF52833 Product Specification](https://docs.nordicsemi.com/bundle/nRF52833_PS_v1.6/resource/nRF52833_PS_v1.6.pdf) - 620 pages of glory
 
